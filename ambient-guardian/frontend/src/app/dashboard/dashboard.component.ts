@@ -4,48 +4,44 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AiInsightsComponent } from '../components/ai-insights/ai-insights.component';
 import { AlertsPanelComponent } from '../components/alerts-panel/alerts-panel.component';
 import { FloorMapComponent } from '../components/floor-map/floor-map.component';
-import { RiskCardComponent } from '../components/risk-card/risk-card.component';
+import { RiskGaugeComponent } from '../components/risk-gauge/risk-gauge.component';
+import { ScenarioControlsComponent } from '../components/scenario-controls/scenario-controls.component';
 import { SensorTimelineComponent } from '../components/sensor-timeline/sensor-timeline.component';
-import { ApiService } from '../services/api.service';
-import { WebsocketService } from '../services/websocket.service';
+import { StatusCardComponent } from '../components/status-card/status-card.component';
+import { ScenarioType } from '../models/dashboard.models';
+import { DashboardStateService } from '../services/dashboard-state.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     CommonModule,
-    RiskCardComponent,
+    StatusCardComponent,
     FloorMapComponent,
     AiInsightsComponent,
     AlertsPanelComponent,
+    RiskGaugeComponent,
     SensorTimelineComponent
+    ,
+    ScenarioControlsComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
-  private readonly api = inject(ApiService);
-  private readonly websocket = inject(WebsocketService);
-
-  snapshot: any = null;
-  loading = true;
+  readonly dashboardState = inject(DashboardStateService);
+  readonly state = this.dashboardState.state;
+  readonly statusCards = this.dashboardState.statusCards;
 
   ngOnInit(): void {
-    this.api.getSnapshot().subscribe({
-      next: (data) => {
-        if (!data.message) {
-          this.snapshot = data;
-          this.loading = false;
-        }
-      },
-      error: () => {
-        this.loading = false;
-      }
-    });
+    this.dashboardState.initialize();
+  }
 
-    this.websocket.messages$.subscribe((payload) => {
-      this.snapshot = payload;
-      this.loading = false;
-    });
+  runScenario(scenario: ScenarioType): void {
+    this.dashboardState.runScenario(scenario);
+  }
+
+  toggleAlert(alertId: string): void {
+    this.dashboardState.toggleAlert(alertId);
   }
 }

@@ -1,0 +1,92 @@
+.page-shell {
+  padding: 32px;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  font-size: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(32px, 5vw, 54px);
+}
+
+.subtitle {
+  max-width: 720px;
+  color: var(--muted);
+}
+
+.status-pill {
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  text-transform: capitalize;
+}
+
+.status-pill--warn {
+  background: #fff3e6;
+  color: #9a5400;
+}
+
+.loading-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+}
+
+app-risk-card,
+app-floor-map,
+app-ai-insights,
+app-alerts-panel,
+app-sensor-timeline {
+  display: block;
+}
+
+app-risk-card,
+app-floor-map,
+app-ai-insights {
+  grid-column: span 4;
+}
+
+app-alerts-panel,
+app-sensor-timeline {
+  grid-column: span 6;
+}
+
+@media (max-width: 900px) {
+  .page-shell {
+    padding: 20px;
+  }
+
+  .hero {
+    flex-direction: column;
+  }
+
+  app-risk-card,
+  app-floor-map,
+  app-ai-insights,
+  app-alerts-panel,
+  app-sensor-timeline {
+    grid-column: 1 / -1;
+  }
+}

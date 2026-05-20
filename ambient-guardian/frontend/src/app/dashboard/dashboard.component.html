@@ -1,0 +1,28 @@
+<section class="page-shell">
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Live Environmental Monitoring</p>
+      <h1>Ambient Guardian</h1>
+      <p class="subtitle">
+        Real-time ambient safety signals, AI reasoning, and alert visibility for operations teams.
+      </p>
+    </div>
+    <div class="status-pill" [class.status-pill--warn]="snapshot?.risk?.level !== 'normal'">
+      {{ snapshot?.risk?.level || 'warming-up' }}
+    </div>
+  </header>
+
+  <section *ngIf="loading" class="loading-card">
+    Connecting to backend simulation stream...
+  </section>
+
+  <ng-container *ngIf="!loading && snapshot as live">
+    <section class="dashboard-grid">
+      <app-risk-card [risk]="live.risk" [sensorPacket]="live.sensorPacket" />
+      <app-floor-map [zone]="live.sensorPacket.zone" [scenario]="live.sensorPacket.scenario" />
+      <app-ai-insights [explanation]="live.explanation" [anomaly]="live.anomaly" />
+      <app-alerts-panel [alerts]="live.alerts" />
+      <app-sensor-timeline [sensorPacket]="live.sensorPacket" />
+    </section>
+  </ng-container>
+</section>
